@@ -84,6 +84,14 @@ app.get('/', checkAuthenticated, (req, res) => {
   res.render('index.ejs', { name: req.user.name })
 })
 
+app.get('/change_password', (req, res) => {
+  res.render('change_password.ejs')
+})
+
+app.post('/change_password', (req, res) =>{
+  res.send('sorry!! this functionality is not yet complete')
+})
+
 app.get('/login', checkNotAuthenticated, (req, res) => {
   res.render('login.ejs')
 })
