@@ -1,3 +1,7 @@
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').config()
+}
+
 //const passport = require('passport');
 const bcryptjs = require('bcryptjs');
 const nodemailer = require('nodemailer');
@@ -38,13 +42,13 @@ exports.registerHandle = (req, res) => {
             } else {
 
                 const oauth2Client = new OAuth2(
-                    "632545369287-u762m8i3j6g861c2lr06jrhlu0k1ju8p.apps.googleusercontent.com", // ClientID
-                    "QLtHiNB-vyz8bwCTfE8pjR-V", // Client Secret
+                    process.env.CLIENT_ID, // ClientID
+                    process.env.CLIENT_SECRET, // Client Secret
                     "https://developers.google.com/oauthplayground" // Redirect URL
                 );
 
                 oauth2Client.setCredentials({
-                    refresh_token: "1//04NRIPBmPEzyyCgYIARAAGAQSNwF-L9IrlK4JQXYQ2KKpwolnvzuxwt_bGV8o3UgRarsuHYxAJDU7Xy4YBr8Nv3BjDwaQ-mzfimE"
+                    refresh_token: process.env.REFRESH_TOKEN 
                 });
                 const accessToken = oauth2Client.getAccessToken()
 
@@ -61,10 +65,10 @@ exports.registerHandle = (req, res) => {
                     service: 'gmail',
                     auth: {
                         type: "OAuth2",
-                        user: "shivam.k@iiitg.ac.in",
-                        clientId: "632545369287-u762m8i3j6g861c2lr06jrhlu0k1ju8p.apps.googleusercontent.com",
-                        clientSecret: "QLtHiNB-vyz8bwCTfE8pjR-V",
-                        refreshToken: "1//04NRIPBmPEzyyCgYIARAAGAQSNwF-L9IrlK4JQXYQ2KKpwolnvzuxwt_bGV8o3UgRarsuHYxAJDU7Xy4YBr8Nv3BjDwaQ-mzfimE",
+                        user: process.env.GMAIL_ID,
+                        clientId: process.env.CLIENT_ID,
+                        clientSecret: process.env.CLIENT_SECRET,
+                        refreshToken: process.env.REFRESH_TOKEN,
                         accessToken: accessToken
                     },
                 });

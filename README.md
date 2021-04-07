@@ -1,1 +1,14 @@
 # Nodejs_login
+Node js login system with functionality of login, register, email verification, change password and passport authentication etc.
+
+## modify your mongo db connection url as per your database name in server.js
+
+## create a .env file in main folder and set the following values
+SESSION_SECRET=
+GMAIL_ID=
+CLIENT_ID=
+CLIENT_SECRET=
+REFRESH_TOKEN=
+
+use this video to get your client id, secret and refresh token </br>
+https://www.youtube.com/watch?v=-rcRf7yswfM
