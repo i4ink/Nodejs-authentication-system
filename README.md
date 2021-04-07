@@ -1,7 +1,7 @@
 # Nodejs_login
 * Node js login system with functionality of login, register, email verification, change password and passport authentication etc.
 
-## modify your mongo db connection url as per your database name in server.js
+## modify your mongo db connection url as per your database name in [server.js](server.js)
 
 ## create a .env file in main folder and set the following values
 * SESSION_SECRET=
