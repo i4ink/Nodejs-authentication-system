@@ -21,6 +21,8 @@
   <%= messages.error %>
 <% } %> </p>
 
+      <%- include ("./messages") %>
+
 <div class="login-form">
     <form action="/register" method="POST" >
         <h2 class="text-center">Register</h2>   
@@ -83,8 +85,8 @@
             }  
             }  
             </script>
+    <p style="color:black;" class="text-center small">Already have an account <u><a style="color: blue;" href="/login">Login!</a></u></p>
     </form>
-    <p class="text-center small">Already have an account <a href="/login">Login!</a></p>
 </div>
 </body>
 </html>

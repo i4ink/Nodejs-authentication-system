@@ -20,6 +20,8 @@
   <%= messages.error %>
 <% } %> </p>
 
+      <%- include ("./messages") %>
+
 <div class="login-form">
     <form action="/login" method="POST">
         <h2 class="text-center">Login</h2>   
@@ -32,9 +34,9 @@
         <div class="form-group">
             <button type="submit" class="btn btn-primary btn-lg btn-block">Sign in</button>
         </div>
-        <p><a href="#">Forgot Password?</a></p>
+        <p><a style="color: blue;" href="/forgot">Forgot Password?</a></p>
+    <p style="color:black;" class="text-center small">Don't have an account? <u><a style="color: blue;" href="/register">Register!</a></u></p>
     </form>
-    <p class="text-center small">Don't have an account? <a href="/register">Register!</a></p>
 </div>
 </body>
 </html>

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>Reset</title>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<link rel="stylesheet" type="text/css" href="css/style.css" />
+
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+</head>
+<body >
+
+<p class="text-center" style="color: red;">
+ <% if (messages.error) { %>
+  <%= messages.error %>
+<% } %> </p>
+
+      <%- include ("./messages") %>
+
+    <div class="login-form">
+        <form action="/reset/<%= id %>" method="POST">
+            <div class="form-group">
+                <input type="password" id="new_password" class="form-control" name="new_password" placeholder="New Password" onchange="verifyPassword()" required="required" />
+            </div>        
+            <div class="form-group">
+                <input  type="password" id="confirm_password" class="form-control" name="confirm_password" placeholder="Confirm Password"  required="required" />
+            </div>        
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary btn-lg btn-block" onclick="return Validate()">Reset Password</button>
+            </div>
+
+		<script type="text/javascript">
+
+            function Validate() {
+                var password = document.getElementById("new_password").value;
+                var confirmPassword = document.getElementById("confirm_password").value;
+                if (password != confirmPassword) {
+                    alert("Passwords do not match.");
+                    return false;
+                }
+                return true;
+            }
+
+            function verifyPassword() {  
+            var pw = document.getElementById("new_password").value;  
+            //check empty password field  
+            if(pw == "") {  
+                //document.getElementById("message").innerHTML = "**Fill the password please!";  
+                alert("**Fill the password please!");
+                document.getElementById("new_password").focus();  
+                document.getElementById("new_password").select();  
+                return false;  
+            }  
+            
+            //minimum password length validation  
+            if(pw.length < 8) {  
+                //document.getElementById("message").innerHTML = "**Password length must be atleast 8 characters";  
+                alert("**Password length must be atleast 8 characters");
+                document.getElementById("new_password").focus();  
+                document.getElementById("new_password").select();  
+                return false;  
+            }  
+            
+            //maximum length of password validation  
+            if(pw.length > 15) {  
+                //document.getElementById("message").innerHTML = "**Password length must not exceed 15 characters";  
+                alert("**Password length must not exceed 15 characters");
+                document.getElementById("new_password").focus();  
+                document.getElementById("new_password").select();  
+                return false;  
+            } else {  
+                return true;
+                //alert("Password is correct");  
+            }  
+            }  
+
+		</script>
+    <p style="color:black;" class="text-center small">Remember your password?<u><a style="color: blue;" href="/login">LOGIN</a></u></p>
+        </form>
+    </div>
+</body>
+</html>
