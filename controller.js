@@ -322,23 +322,6 @@ exports.resetPassword = (req, res) => {
     // console.log('id = ' + id);
     let errors = [];
 
-    //------------ Checking required fields ------------//
-    // if (!password || !password2) {
-    //     req.flash(
-    //         'error_msg',
-    //         'Please enter all fields.'
-    //     );
-    //     res.redirect(`/reset/${id}`);
-    // }
-
-    //------------ Checking password length ------------//
-    // if (password.length < 8) {
-    //     req.flash(
-    //         'error_msg',
-    //         'Password must be at least 8 characters.'
-    //     );
-    //     res.redirect(`/reset/${id}`);
-    // }
 
     //------------ Checking password mismatch ------------//
     if (password != password2) {
@@ -384,4 +367,17 @@ exports.resetPassword = (req, res) => {
             });
         });
     }
+}
+
+exports.deletAccount = (req, res) =>{
+    User.findOneAndDelete({email: req.user.email}, (err, user) => {
+    if (err) {
+        req.flash( 'error_msg', 'Error deleting account try again');
+        res.redirect('/');
+    }
+    else {
+        req.flash( 'succ_msg', 'Successfully Deleted!!');
+        res.redirect('/successful')
+    }
+    })
 }

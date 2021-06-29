@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Forgot</title>
+<title>Reset</title>
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 
@@ -23,17 +23,30 @@
       <%- include ("./messages") %>
 
     <div class="login-form">
-        <form action="/forgot" method="POST" id="reg-form">
+        <form action="/DeleteAccount" method="POST">
+        <h3 class="text-center">Type <b>confirm</b> to delete your account</h3>   
             <div class="form-group">
-                <input type="email" id="email" class="form-control" name="email" placeholder="Enter Your Email" onchange="" required="required"/>
+                <input  type="input" id="confirm" class="form-control" name="confirm" placeholder="Type confirm"  required="required" />
             </div>        
             <div class="form-group">
-                <button type="submit" class="btn btn-primary btn-lg btn-block" >Send Password Reset Link</button>
+                <button type="submit" class="btn-danger btn-lg btn-block " onclick="return Validate()">Delete</button>
             </div>
 
-    <p style="color:black;" class="text-center small">Remember your password?<u><a style="color: blue;" href="/login">LOGIN</a></u></p>
+		<script type="text/javascript">
+
+            function Validate() {
+                var val = document.getElementById("confirm").value;
+                if (val != "confirm") {
+                    alert("invalid input");
+                    return false;
+                }
+                return true;
+            }
+
+
+		</script>
+    <p style="color:black;" class="text-center small">Back to <u><a style="color: blue;" href="/">HOME</a></u></p>
         </form>
     </div>
-
 </body>
 </html>

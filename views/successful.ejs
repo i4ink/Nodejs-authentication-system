@@ -24,22 +24,17 @@
 
       <%- include ("./messages") %>
 
-<h2 class="text-center" ><p  style="color: rgb(6, 58, 10);"><b>Welcome <%= name %>!!</b></p></h2>
-<h2 class="text-center" ><p  style="color: rgb(6, 58, 10);"><b>Welcome <%= eid %>!!</b></p></h2>
 
 <!-- <form action="/logout?_method=DELETE" method="POST">
   <button class="btn" type="submit" class='text-center'>Log Out</button>
 </form> -->
 
 <div class="container">
-  <form action="/logout?_method=DELETE" method="POST">
-    <button id="logout" class="btn btn-link" type="submit" >Log Out</button>
-  </form>
+<h2 class="text-center" ><p  style="color: rgb(6, 58, 10);"><b>Your account has beed deleted successfully!!</b></p></h2>
 </br>
-  <button id="changePassword" class="btn btn-link" type="submit" ><a href='/change_password'>Change Password</a></button>
+  <h3>Create New account <a href='/register'> Register</a></h3>
 </br>
-</br>
-  <button id="deleteAccount" class="btn btn-link"  type="submit" ><a style="color: red;" href='/delete'>Delete account</a></button>
+  <h3>Login with a different account <a href='/login'> Login</a></h3>
 </div>
 
 </body>

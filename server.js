@@ -7,6 +7,7 @@ const mongoose = require('mongoose')
 const Users = require('./model/user')
 const app = express()
 const bcrypt = require('bcrypt')
+const bcryptjs = require('bcryptjs');
 const passport = require('passport')
 const flash = require('express-flash')
 const session = require('express-session')
@@ -15,50 +16,9 @@ const authController = require('./controller')
 const cookieParser = require('cookie-parser');
 
 
-// to implement forgot password
-/*
-const uuidv1 = require('uuid/v1');
-//const { createUser, getUser, updateUser } = require("./model/users");
-const { getResetRequest, createResetRequest } = require("./model/resetRequests");
-const sendResetLink = require("./sendEmail");
-*/
 
 const initializePassport = require('./passport-config')
-initializePassport(
-  passport
-  /*
-  //email => users.find(user => user.email === email),
-  async email => {
-    await Users.find({email: email}).then(result =>{
-      console.log('is email correct\n',result)
-      return result
-    }).catch(err =>{
-      console.log(err.message)
-    })
-  },
-
-  async id =>  {
-    await Users.find({id: id}, function (err, docs) {}).then(result =>{
-      console.log('is id correct\n',result)
-      return result
-    }).catch(err =>{
-      console.log(err.message)
-    })
-  }
-  /*
-  email => Users.find({email: email}).then(result =>{
-    return result
-  }).catch(err =>{
-    console.log(err.message)
-  }),
-  //id => users.find(user => user.id === id)
-  id => Users.find({id: id}).then(result =>{
-    return result
-  }).catch(err =>{
-    console.log(err.message)
-  })
-  */
-)
+initializePassport(passport)
 
 mongoose.connect('mongodb://localhost:27017/nodejs_login', {
 	useNewUrlParser: true,
@@ -68,7 +28,6 @@ mongoose.connect('mongodb://localhost:27017/nodejs_login', {
 }).then(() => {console.log('successfully connected to db')}).catch(err => console.log(err.message))
 
 
-//const users = []
 
 app.set('view engine', 'ejs')
 app.use(express.urlencoded({ extended: false }))
@@ -92,7 +51,9 @@ app.use(function(req, res, next) {
 });
 
 app.get('/', checkAuthenticated, (req, res) => {
-  res.render('index.ejs', { name: req.user.name })
+  if(req.isAuthenticated()){
+    res.render('index.ejs', { name: req.user.name, eid: req.user.email })
+  }
 })
 
 
@@ -120,6 +81,17 @@ app.post('/forgot', checkNotAuthenticated, authController.forgotPassword);
 app.get('/forgot/:token', checkNotAuthenticated, authController.gotoReset);
 
 
+//--------------------delete account functionality---------//
+app.get('/delete', checkAuthenticated, (req, res) =>{
+  res.render('delete.ejs')
+})
+
+app.post('/DeleteAccount', checkAuthenticated, authController.deletAccount);
+
+//---------successful deleteion message------------//
+app.get('/successful', checkNotAuthenticated, (req, res) =>{
+  res.render('successful.ejs')
+})
 
 
 
@@ -128,69 +100,58 @@ app.get('/change_password', checkAuthenticated,  (req, res) => {
   res.render('change_password.ejs')
 })
 
+app.post('/change_password', async (req, res) =>{
+  var oldpass = req.body.old_password
+  var _id
+  await Users.findOne({email: req.user.email}).then(answer =>{
+    // console.log(answer)
+    _id = answer._id
+  }).catch(err => console.log('****here**** '+err))
 
-app.post('/change_password',checkAuthenticated, (req, res) =>{
-  // res.send('sorry!! this functionality is not yet complete')
-  // var cid = req.session.id;
+  var newpass = req.body.new_password
+  //check if wrong or invalid email id is provided
+  // if(_id==null){
+  //   req.flash("error_msg", "Please enter correct email id")
+  //   res.redirect('/change_password')
+  //   return
+  // }
 
-  req.flash('error_msg', 'sorry this functionality is not yet added!');
-  res.redirect('/change_password')
+  Users.findById(_id, function (err, doc){
+    //console.log('doc****'+doc)
+    if(err) console.log(err)
 
-  /*
-  let cur_email = req.session;
-  console.log('this is current email -: ' + cur_email)
-  if(cur_email.email){
-    var old_pass = req.body.old_password;
-    var new_pass = req.body.new_password;
-    var confirm_pass = req.body.confirm_password;
-    Users.findOne({ email : cur_email }, (err, cur_user) =>{
-      if(cur_user != null){
-        var hash = cur_user.password;
-        bcrypt.compare(old_pass, hash, function(err, res1) {
-          if(res1){
-            // password matched
-            if(new_pass == confirm_pass){
+    if (!doc) {
+    req.flash('error_msg','no user with this email')
+    res.redirect('/')
+  }
+
+  /*******match old password with new one*******/
+  bcrypt.compare(oldpass, doc.password, (err, isMatch) => {
+      if (err) throw err;
+      if(oldpass==newpass){
+        req.flash('error_msg', "old and new password can't be same")
+        res.redirect('/change_password')
+      }
+      else if (isMatch) {
                   bcryptjs.genSalt(10, (err, salt) => {
-                      bcryptjs.hash(new_pass, salt, (err, hash) => {
+                    if(err) throw err;
+                      bcryptjs.hash(newpass, salt, (err, hash) => {
                           if (err) throw err;
-                          cur_user.password = hash;
-                          cur_user.save().then(user => {
-                                  console.log('successfully changed password')
-                                  req.flash(
-                                      'success_msg',
-                                      'Password changed successfully'
-                                  );
-                                  res.redirect('/');
-                              })
-                              .catch(err => console.log(err));
+                          doc.password = hash;
+                          doc.save().catch(err => console.log(err));
+                          req.logout()
+                          req.flash( 'success_msg', 'Password changed successfully please login with new password');
+                          res.redirect('/login')
                       });
                   });
-            }else{
-              req.flash('error_msg', 'new password does not matched');
-              console.log('here1')
-              res.redirect('/change_password')
-            }
-          }else{
-              req.flash('error_msg', 'Wrong old password');
-              console.log('here2')
-              res.redirect('/change_password')
-          }
-        })
-      }else{
-            req.flash('error_msg', 'Login first');
-              console.log('here3')
-            res.redirect('/change_password')
+      } else {
+          req.flash('error_msg','wrong old password')
+          res.redirect('/change_password')
       }
-    } )
-  }
-  else{
-  req.flash('error_msg', 'Please login first');
-  console.log('here4')
-  res.redirect('/login')
-  }
-  */
-
+  });
+  })
 })
+
 
 app.get('/login', checkNotAuthenticated, (req, res) => {
   res.render('login.ejs')
@@ -268,8 +229,13 @@ app.post('/register', checkNotAuthenticated, async (req, res) => {
 */
 
 app.delete('/logout', (req, res) => {
-  req.logOut()
+  req.logout()
+  req.flash('success_msg', 'You are logged out');
   res.redirect('/login')
+})
+
+app.get('/forgot', checkNotAuthenticated, (req, res) => {
+  res.render('forgot.ejs')
 })
 
 function checkAuthenticated(req, res, next) {
