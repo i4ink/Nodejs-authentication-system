@@ -1,5 +1,5 @@
-# Nodejs_login
-* Node js login system with functionality of login, register, email verification, change password , reset password etc. It uses passport authentication, express session maintainance, bcrypt for password hashing, nodemailer and OAuth2 to generate and send emails , JWT token to generate verification and reset links and mongodb as database to store user information.
+# Node.js Authentication
+* Node.js authentication system with functionality of login, register, email verification, change password , reset password etc. It uses passport authentication, express session maintainance, bcrypt for password hashing, nodemailer and OAuth2 to generate and send emails , JWT token to generate verification and reset links and mongodb as database to store user information.
 
 * **Tech stack -:** Node.js, express.js, mongodb, googleapis, JWT, moongoose, Javascript, HTML, CSS, bootstrap.  
 
