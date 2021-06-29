@@ -109,19 +109,13 @@ app.post('/change_password', async (req, res) =>{
   }).catch(err => console.log('****here**** '+err))
 
   var newpass = req.body.new_password
-  //check if wrong or invalid email id is provided
-  // if(_id==null){
-  //   req.flash("error_msg", "Please enter correct email id")
-  //   res.redirect('/change_password')
-  //   return
-  // }
 
   Users.findById(_id, function (err, doc){
     //console.log('doc****'+doc)
     if(err) console.log(err)
 
     if (!doc) {
-    req.flash('error_msg','no user with this email')
+    req.flash('error_msg','something went wrong try again')
     res.redirect('/')
   }
 
@@ -172,61 +166,6 @@ app.post('/register', checkNotAuthenticated, authController.registerHandle);
 
 //------------ Email ACTIVATE Handle ------------//
 app.get('/activate/:token', authController.activateHandle);
-/*
-app.post('/register', checkNotAuthenticated, async (req, res) => {
-  try {
-      const hashedPassword = await bcrypt.hash(req.body.password, 10)
-
-      // users.push({
-      //   id: Date.now().toString(),
-      //   name: req.body.name,
-      //   email: req.body.email,
-      //   password: hashedPassword
-      // })
-
-     var len = 0
-    await Users.find({email:req.body.email}).then(answers =>{
-      len = answers.length
-      //console.log('answers length '+answers.length)
-    }).catch(err =>{
-      console.log(err.message)
-      // res.json({
-      //   confirmation: 'fail',
-      //   data: err.message
-      // })
-
-    })
-    //console.log('len '+len)
-    if(len > 0){
-      res.send('this email is already registered')
-      //res.redirect(301, '/register')
-      //res.redirect('/register')
-    }
-    else{
-      // db
-      const response = await Users.create({ 
-        name: req.body.name,
-        email: req.body.email,
-        password: hashedPassword
-      }, function (err) {
-        if (err) {
-          console.log(err)
-          return
-        }
-        console.log('successfully inserted');
-        // saved!
-      });
-      //console.log('User created successfully: ', response)
-        res.redirect('/login')
-    }
-
-  } catch(err){
-    console.log(err)
-    res.redirect('/register')
-  }
-  //console.log(Users.find())
-})
-*/
 
 app.delete('/logout', (req, res) => {
   req.logout()
@@ -255,46 +194,6 @@ function checkNotAuthenticated(req, res, next) {
 }
 
 
-
-//below is code for reset password implementation
-/*
-app.post("/forgot", (req, res) => {
-    const thisUser = Users.find(user=>user.email===req.body.email)
-    if (thisUser) {
-        const id = uuidv1();
-        const request = {
-            id,
-            email: thisUser.email,
-        };
-        createResetRequest(request);
-        sendResetLink(thisUser.email, id);
-    }
-    res.status(200).json();
-});
-
-app.patch("/reset", (req, res) => {
-    const thisRequest = getResetRequest(req.body.id);
-    if (thisRequest) {
-        const user = users.find(user=>user.email===req.body.email)
-        //const user = getUser(thisRequest.email);
-        bcrypt.hash(req.body.password, 10).then(hashed => {
-            user.password = hashed;
-            updateUser(user);
-            res.status(204).json();
-        })
-    } else {
-        res.status(404).json();
-    }
-});
-
-
-function updateUser(user) {
-    const thisUserIndex = users.findIndex(local => local.email === user.email);
-    users[thisUserIndex] = user;
-}
-*/
-
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, console.log(`Server running on PORT ${PORT}`));
-// app.listen(3000)

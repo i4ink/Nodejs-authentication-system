@@ -20,7 +20,7 @@
     * JWT_RESET_KEY=any_valid_string
     * PORT=3000
 
-    * use this video to set up your client id, client secret and refresh token https://www.youtube.com/watch?v=-rcRf7yswfM
+    * use this [video](https://www.youtube.com/watch?v=-rcRf7yswfM) to set up your client id, client secret and refresh token 
     * keep any string as your session secret (longer and complex session secret is preferred)
 
-* **And now you can run the application just by the command `npm run start` !!**
+* **All done!! Now you can run the application just by the command `npm run start`**
